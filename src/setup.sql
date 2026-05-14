@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS project_categories;
+DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS organization;
 
@@ -119,3 +121,70 @@ VALUES
 -- =====================================
 
 SELECT * FROM projects;
+
+-- =====================================
+-- Categories Table
+-- =====================================
+
+CREATE TABLE categories (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- =====================================
+-- Project Categories Table
+-- =====================================
+
+CREATE TABLE project_categories (
+    project_id INT NOT NULL,
+    category_id INT NOT NULL,
+
+    PRIMARY KEY (project_id, category_id),
+
+    CONSTRAINT fk_project
+        FOREIGN KEY (project_id)
+        REFERENCES projects(project_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_category
+        FOREIGN KEY (category_id)
+        REFERENCES categories(category_id)
+        ON DELETE CASCADE
+);
+
+-- =====================================
+-- Insert sample data: Categories
+-- =====================================
+
+INSERT INTO categories (name)
+VALUES
+('Environment'),
+('Education'),
+('Community Support');
+
+-- =====================================
+-- Associate projects with categories
+-- =====================================
+
+INSERT INTO project_categories (project_id, category_id)
+VALUES
+(1, 1),
+(2, 3),
+(3, 1),
+(4, 2),
+(5, 3);
+
+-- =====================================
+-- Verify inserted categories
+-- =====================================
+
+SELECT * FROM categories;
+
+SELECT
+    projects.title,
+    categories.name AS category_name
+FROM project_categories
+JOIN projects
+    ON project_categories.project_id = projects.project_id
+JOIN categories
+    ON project_categories.category_id = categories.category_id;
