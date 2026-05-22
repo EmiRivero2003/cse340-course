@@ -1,6 +1,7 @@
-import pool from "./db.js";
+import pool from './db.js';
 
 export async function getAllProjects() {
+
     const sql = `
         SELECT
             projects.project_id,
@@ -16,6 +17,28 @@ export async function getAllProjects() {
     `;
 
     const result = await pool.query(sql);
+
+    return result.rows;
+}
+
+export async function getProjectsByOrganizationId(organizationId) {
+
+    const sql = `
+        SELECT
+            project_id,
+            organization_id,
+            title,
+            description,
+            location,
+            date
+        FROM projects
+        WHERE organization_id = $1
+        ORDER BY date;
+    `;
+
+    const queryParams = [organizationId];
+
+    const result = await pool.query(sql, queryParams);
 
     return result.rows;
 }

@@ -1,0 +1,48 @@
+<%- include('partials/header') %>
+
+<main>
+
+    <h2><%= organizationDetails.name %></h2>
+
+    <img
+        src="/images/<%= organizationDetails.logo_filename %>"
+        alt="<%= organizationDetails.name %> logo"
+        width="200"
+    >
+
+    <p><%= organizationDetails.description %></p>
+
+    <p>
+        <strong>Email:</strong>
+        <%= organizationDetails.contact_email %>
+    </p>
+
+    <h3>Service Projects</h3>
+
+    <% if (projects.length > 0) { %>
+
+        <ul>
+
+            <% projects.forEach(project => { %>
+
+                <li>
+
+                    <a href="/project/<%= project.project_id %>">
+                        <%= project.title %>
+                    </a>
+
+                </li>
+
+            <% }) %>
+
+        </ul>
+
+    <% } else { %>
+
+        <p>No projects available for this organization.</p>
+
+    <% } %>
+
+</main>
+
+<%- include('partials/footer') %>

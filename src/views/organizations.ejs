@@ -15,10 +15,14 @@
                 <img
                     src="/images/<%= organization.logo_filename %>"
                     alt="<%= organization.name %> logo"
-                    width="120"
+                    width="150"
                 >
 
-                <h2><%= organization.name %></h2>
+                <h2>
+                    <a href="/organization/<%= organization.organization_id %>">
+                        <%= organization.name %>
+                    </a>
+                </h2>
 
                 <p><%= organization.description %></p>
 
@@ -29,7 +33,7 @@
 
             </li>
 
-        <% }); %>
+        <% }) %>
 
     </ul>
 
