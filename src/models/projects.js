@@ -1,7 +1,6 @@
 import pool from './db.js';
 
 export async function getAllProjects() {
-
     const sql = `
         SELECT
             projects.project_id,
@@ -9,6 +8,7 @@ export async function getAllProjects() {
             projects.description,
             projects.location,
             projects.date,
+            projects.organization_id,
             organization.name AS organization_name
         FROM projects
         JOIN organization
@@ -22,7 +22,6 @@ export async function getAllProjects() {
 }
 
 export async function getProjectsByOrganizationId(organizationId) {
-
     const sql = `
         SELECT
             project_id,
@@ -41,4 +40,54 @@ export async function getProjectsByOrganizationId(organizationId) {
     const result = await pool.query(sql, queryParams);
 
     return result.rows;
+}
+
+export async function getUpcomingProjects(numberOfProjects) {
+    const sql = `
+        SELECT
+            projects.project_id,
+            projects.title,
+            projects.description,
+            projects.date,
+            projects.location,
+            projects.organization_id,
+            organization.name AS organization_name
+        FROM projects
+        JOIN organization
+            ON projects.organization_id = organization.organization_id
+        WHERE projects.date >= CURRENT_DATE
+        ORDER BY projects.date ASC
+        LIMIT $1;
+    `;
+
+    const queryParams = [numberOfProjects];
+
+    const result = await pool.query(sql, queryParams);
+
+    return result.rows;
+}
+
+export async function getProjectDetails(projectId) {
+    const sql = `
+        SELECT
+            projects.project_id,
+            projects.title,
+            projects.description,
+            projects.date,
+            projects.location,
+            projects.organization_id,
+            organization.name AS organization_name
+        FROM projects
+        JOIN organization
+            ON projects.organization_id = organization.organization_id
+        WHERE projects.project_id = $1;
+    `;
+
+    const queryParams = [projectId];
+
+    const result = await pool.query(sql, queryParams);
+
+    return result.rows.length > 0
+        ? result.rows[0]
+        : null;
 }
