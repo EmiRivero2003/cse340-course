@@ -14,7 +14,10 @@ import {
 
 import {
     showProjectsPage,
-    showProjectDetailsPage
+    showProjectDetailsPage,
+    showNewProjectForm,
+    processNewProjectForm,
+    projectValidation
 } from './controllers/projects.js';
 
 import {
@@ -41,6 +44,10 @@ router.get('/new-organization', showNewOrganizationForm);
 router.post('/new-organization', organizationValidation, processNewOrganizationForm);
 
 router.get('/projects', showProjectsPage);
+
+router.get('/new-project', showNewProjectForm);
+
+router.post('/new-project', projectValidation, processNewProjectForm);
 
 router.get('/project/:id', showProjectDetailsPage);
 

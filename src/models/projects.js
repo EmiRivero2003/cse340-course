@@ -91,3 +91,21 @@ export async function getProjectDetails(projectId) {
         ? result.rows[0]
         : null;
 }
+
+export async function createProject(title, description, location, date, organizationId) {
+    const sql = `
+        INSERT INTO projects (title, description, location, date, organization_id)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING project_id;
+    `;
+
+    const queryParams = [title, description, location, date, organizationId];
+
+    const result = await pool.query(sql, queryParams);
+
+    if (result.rows.length === 0) {
+        throw new Error('Failed to create project');
+    }
+
+    return result.rows[0].project_id;
+}
