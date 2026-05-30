@@ -100,3 +100,40 @@ export async function updateCategoryAssignments(projectId, categoryIds) {
         await assignCategoryToProject(projectId, categoryId);
     }
 }
+
+export async function createCategory(name) {
+    const sql = `
+        INSERT INTO categories (name)
+        VALUES ($1)
+        RETURNING category_id;
+    `;
+
+    const queryParams = [name];
+
+    const result = await pool.query(sql, queryParams);
+
+    if (result.rows.length === 0) {
+        throw new Error('Failed to create category');
+    }
+
+    return result.rows[0].category_id;
+}
+
+export async function updateCategory(categoryId, name) {
+    const sql = `
+        UPDATE categories
+        SET name = $1
+        WHERE category_id = $2
+        RETURNING *;
+    `;
+
+    const queryParams = [name, categoryId];
+
+    const result = await pool.query(sql, queryParams);
+
+    if (result.rows.length === 0) {
+        throw new Error('Category not found or update failed.');
+    }
+
+    return result.rows[0];
+}
