@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS project_categories;
-DROP TABLE IF EXISTS categories;
-DROP TABLE IF EXISTS projects;
-DROP TABLE IF EXISTS organization;
+DROP TABLE IF EXISTS project_categories CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+DROP TABLE IF EXISTS projects CASCADE;
+DROP TABLE IF EXISTS organization CASCADE;
 
 -- =====================================
 -- Organization Table
