@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS roles CASCADE;
 DROP TABLE IF EXISTS project_categories CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS projects CASCADE;
@@ -16,42 +18,30 @@ CREATE TABLE organization (
 );
 
 -- =====================================
--- Insert sample data: Organizations
+-- Roles Table
 -- =====================================
 
-INSERT INTO organization
-(name, description, contact_email, logo_filename)
-
-VALUES
-(
-    'BrightFuture Builders',
-    'A nonprofit focused on improving community infrastructure through sustainable construction projects.',
-    'info@brightfuturebuilders.org',
-    'brightfuture-logo.png'
-),
-
-(
-    'GreenHarvest Growers',
-    'An urban farming collective promoting food sustainability and education in local neighborhoods.',
-    'contact@greenharvest.org',
-    'greenharvest-logo.png'
-),
-
-(
-    'UnityServe Volunteers',
-    'A volunteer coordination group supporting local charities and service initiatives.',
-    'hello@unityserve.org',
-    'unityserve-logo.png'
+CREATE TABLE roles (
+    role_id SERIAL PRIMARY KEY,
+    role_name VARCHAR(50) UNIQUE NOT NULL,
+    role_description TEXT
 );
 
 -- =====================================
--- Verify inserted organizations
+-- Users Table
 -- =====================================
 
-SELECT * FROM organization;
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role_id INTEGER REFERENCES roles(role_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 -- =====================================
--- Project Table
+-- Projects Table
 -- =====================================
 
 CREATE TABLE projects (
@@ -67,60 +57,6 @@ CREATE TABLE projects (
         REFERENCES organization(organization_id)
         ON DELETE CASCADE
 );
-
--- =====================================
--- Insert sample data: Projects
--- =====================================
-
-INSERT INTO projects
-(organization_id, title, description, location, date)
-
-VALUES
-(
-    1,
-    'Beach Cleanup',
-    'Cleaning the beach area',
-    'Miami',
-    '2026-05-20'
-),
-
-(
-    1,
-    'Food Drive',
-    'Collecting food donations',
-    'Orlando',
-    '2026-06-10'
-),
-
-(
-    2,
-    'Tree Planting',
-    'Planting trees in parks',
-    'Dallas',
-    '2026-07-15'
-),
-
-(
-    2,
-    'School Support',
-    'Helping local schools',
-    'Austin',
-    '2026-08-01'
-),
-
-(
-    3,
-    'Animal Rescue',
-    'Helping abandoned pets',
-    'Denver',
-    '2026-09-05'
-);
-
--- =====================================
--- Verify inserted projects
--- =====================================
-
-SELECT * FROM projects;
 
 -- =====================================
 -- Categories Table
@@ -153,6 +89,90 @@ CREATE TABLE project_categories (
 );
 
 -- =====================================
+-- Insert sample data: Organizations
+-- =====================================
+
+INSERT INTO organization
+(name, description, contact_email, logo_filename)
+VALUES
+(
+    'BrightFuture Builders',
+    'A nonprofit focused on improving community infrastructure through sustainable construction projects.',
+    'info@brightfuturebuilders.org',
+    'brightfuture-logo.png'
+),
+(
+    'GreenHarvest Growers',
+    'An urban farming collective promoting food sustainability and education in local neighborhoods.',
+    'contact@greenharvest.org',
+    'greenharvest-logo.png'
+),
+(
+    'UnityServe Volunteers',
+    'A volunteer coordination group supporting local charities and service initiatives.',
+    'hello@unityserve.org',
+    'unityserve-logo.png'
+);
+
+-- =====================================
+-- Insert sample data: Roles
+-- =====================================
+
+INSERT INTO roles (role_name, role_description)
+VALUES
+(
+    'user',
+    'Standard user with basic access'
+),
+(
+    'admin',
+    'Administrator with full system access'
+);
+
+-- =====================================
+-- Insert sample data: Projects
+-- =====================================
+
+INSERT INTO projects
+(organization_id, title, description, location, date)
+VALUES
+(
+    1,
+    'Beach Cleanup',
+    'Cleaning the beach area',
+    'Miami',
+    '2026-05-20'
+),
+(
+    1,
+    'Food Drive',
+    'Collecting food donations',
+    'Orlando',
+    '2026-06-10'
+),
+(
+    2,
+    'Tree Planting',
+    'Planting trees in parks',
+    'Dallas',
+    '2026-07-15'
+),
+(
+    2,
+    'School Support',
+    'Helping local schools',
+    'Austin',
+    '2026-08-01'
+),
+(
+    3,
+    'Animal Rescue',
+    'Helping abandoned pets',
+    'Denver',
+    '2026-09-05'
+);
+
+-- =====================================
 -- Insert sample data: Categories
 -- =====================================
 
@@ -175,9 +195,13 @@ VALUES
 (5, 3);
 
 -- =====================================
--- Verify inserted categories
+-- Verify inserted data
 -- =====================================
 
+SELECT * FROM organization;
+SELECT * FROM roles;
+SELECT * FROM users;
+SELECT * FROM projects;
 SELECT * FROM categories;
 
 SELECT
