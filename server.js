@@ -41,6 +41,12 @@ app.use(session({
 // Use flash message middleware
 app.use(flash);
 
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    res.locals.isLoggedIn = !!req.session.user;
+    next();
+});
+
 // Middleware to log all incoming requests
 app.use((req, res, next) => {
     if (NODE_ENV === 'development') {

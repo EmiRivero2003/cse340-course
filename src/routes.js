@@ -36,7 +36,10 @@ import {
 
 import {
     showUserRegistrationForm,
-    processUserRegistrationForm
+    processUserRegistrationForm,
+    showLoginForm,
+    processLoginForm,
+    processLogout
 } from './controllers/users.js';
 
 import { testErrorPage } from './controllers/errors.js';
@@ -137,6 +140,12 @@ router.post(
 router.get('/register', showUserRegistrationForm);
 
 router.post('/register', processUserRegistrationForm);
+
+router.get('/login', showLoginForm);
+
+router.post('/login', processLoginForm);
+
+router.get('/logout', processLogout);
 
 // =====================================
 // Error Testing Routes
