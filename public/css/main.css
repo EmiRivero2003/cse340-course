@@ -39,6 +39,11 @@ nav a:hover {
     color: #a8d0ff;
 }
 
+.user-welcome {
+    color: #ffd700;
+    font-weight: 600;
+}
+
 /* Main Content */
 
 main {

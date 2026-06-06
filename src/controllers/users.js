@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';
 import {
     createUser,
-    authenticateUser
+    authenticateUser,
+    getAllUsers
 } from '../models/users.js';
 
 const showUserRegistrationForm = (req, res) => {
@@ -25,6 +26,23 @@ const processUserRegistrationForm = async (req, res) => {
 
         req.flash('error', 'An error occurred during registration. Please try again.');
         res.redirect('/register');
+    }
+};
+
+const showUsersPage = async (req, res) => {
+    try {
+        const users = await getAllUsers();
+
+        res.render('users', {
+            title: 'Users',
+            users
+        });
+
+    } catch (error) {
+        console.error('Error loading users:', error);
+
+        req.flash('error', 'Unable to load users.');
+        res.redirect('/dashboard');
     }
 };
 
@@ -122,5 +140,6 @@ export {
     processLogout,
     requireLogin,
     requireRole,
-    showDashboard
+    showDashboard,
+    showUsersPage
 };

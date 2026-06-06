@@ -1,6 +1,12 @@
+// src/routes.js
+
 import express from 'express';
 
+// Home controller
+
 import { showHomePage } from './controllers/index.js';
+
+// Organization-related controllers
 
 import {
     showOrganizationsPage,
@@ -12,6 +18,8 @@ import {
     processEditOrganizationForm
 } from './controllers/organizations.js';
 
+// Project-related controllers
+
 import {
     showProjectsPage,
     showProjectDetailsPage,
@@ -21,6 +29,8 @@ import {
     processEditProjectForm,
     projectValidation
 } from './controllers/projects.js';
+
+// Category-related controllers
 
 import {
     showCategoriesPage,
@@ -34,6 +44,8 @@ import {
     categoryValidation
 } from './controllers/categories.js';
 
+// User-related controllers
+
 import {
     showUserRegistrationForm,
     processUserRegistrationForm,
@@ -42,7 +54,8 @@ import {
     processLogout,
     requireLogin,
     showDashboard,
-    requireRole
+    requireRole,
+    showUsersPage
 } from './controllers/users.js';
 
 import { testErrorPage } from './controllers/errors.js';
@@ -183,6 +196,8 @@ router.post('/login', processLoginForm);
 router.get('/logout', processLogout);
 
 router.get('/dashboard', requireLogin, showDashboard);
+
+router.get('/users', requireRole('admin'), showUsersPage);
 
 // =====================================
 // Error Testing Routes
