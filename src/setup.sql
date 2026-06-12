@@ -1,6 +1,8 @@
+DROP TABLE IF EXISTS project_volunteers CASCADE;
+DROP TABLE IF EXISTS project_categories CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
-DROP TABLE IF EXISTS project_categories CASCADE;
+
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS projects CASCADE;
 DROP TABLE IF EXISTS organization CASCADE;
@@ -85,6 +87,28 @@ CREATE TABLE project_categories (
     CONSTRAINT fk_category
         FOREIGN KEY (category_id)
         REFERENCES categories(category_id)
+        ON DELETE CASCADE
+);
+
+-- =====================================
+-- Project Volunteers Table
+-- =====================================
+
+CREATE TABLE project_volunteers (
+    user_id INT NOT NULL,
+    project_id INT NOT NULL,
+    volunteered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (user_id, project_id),
+
+    CONSTRAINT fk_volunteer_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_volunteer_project
+        FOREIGN KEY (project_id)
+        REFERENCES projects(project_id)
         ON DELETE CASCADE
 );
 
@@ -203,6 +227,7 @@ SELECT * FROM roles;
 SELECT * FROM users;
 SELECT * FROM projects;
 SELECT * FROM categories;
+SELECT * FROM project_volunteers;
 
 SELECT
     projects.title,

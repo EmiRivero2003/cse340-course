@@ -27,7 +27,9 @@ import {
     processNewProjectForm,
     showEditProjectForm,
     processEditProjectForm,
-    projectValidation
+    projectValidation,
+    processVolunteerSignup,
+    processVolunteerRemoval
 } from './controllers/projects.js';
 
 // Category-related controllers
@@ -133,6 +135,21 @@ router.post(
     requireRole('admin'),
     projectValidation,
     processEditProjectForm
+);
+
+//=====================================
+// Volunteer Routes
+// =====================================
+router.post(
+    '/project/:id/volunteer',
+    requireLogin,
+    processVolunteerSignup
+);
+
+router.post(
+    '/project/:id/remove-volunteer',
+    requireLogin,
+    processVolunteerRemoval
 );
 
 // =====================================
